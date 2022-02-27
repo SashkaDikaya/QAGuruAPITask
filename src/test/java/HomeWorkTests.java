@@ -7,6 +7,8 @@ import static io.restassured.http.ContentType.JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.json.JSONObject;
+
 
 public class HomeWorkTests {
 
@@ -54,11 +56,13 @@ public class HomeWorkTests {
     @Test
     void createUserTest() {
 
-        String data = "{ \"name\": \"morpheus\", \"job\": \"leader\" }";
+        JSONObject requestBody = new JSONObject()
+                .put("name", "morpheus")
+                .put("job", "leader");
 
         given()
                 .contentType(JSON)
-                .body(data)
+                .body(requestBody.toString())
                 .when()
                 .post("https://reqres.in/api/users")
                 .then()
@@ -70,11 +74,13 @@ public class HomeWorkTests {
     @Test
     void registerUserTest() {
 
-        String data = "{ \"email\": \"eve.holt@reqres.in\", \"password\": \"pistol\" }";
+        JSONObject requestBody = new JSONObject()
+                .put("email", "eve.holt@reqres.in")
+                .put("password", "pistol");
 
         given()
                 .contentType(JSON)
-                .body(data)
+                .body(requestBody.toString())
                 .when()
                 .post("https://reqres.in/api/register")
                 .then()
@@ -85,11 +91,13 @@ public class HomeWorkTests {
     @Test
     void updateUserTest() {
 
-        String data = "{ \"name\": \"morpheus\", \"job\": \"zion resident\" }";
+        JSONObject requestBody = new JSONObject()
+                .put("name", "morpheus")
+                .put("job", "zion resident");
 
         given()
                 .contentType(JSON)
-                .body(data)
+                .body(requestBody.toString())
                 .when()
                 .post("https://reqres.in/api/users/2")
                 .then()
@@ -111,12 +119,13 @@ public class HomeWorkTests {
     @Test
     void successfulLogin() {
 
-        String data = "{ \"email\": \"eve.holt@reqres.in\"," +
-                " \"password\": \"cityslicka\" }";
+        JSONObject requestBody = new JSONObject()
+                .put("email", "eve.holt@reqres.in")
+                .put("password", "cityslicka");
 
         given()
                 .contentType(JSON)
-                .body(data)
+                .body(requestBody.toString())
                 .when()
                 .post("https://reqres.in/api/login")
                 .then()

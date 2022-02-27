@@ -12,6 +12,7 @@ def restAssured = "4.4.0",
 
 dependencies {
     testImplementation(
+            'org.json:json:20211205',
             "io.rest-assured:rest-assured:$restAssured",
             "org.assertj:assertj-core:3.22.0",
             "org.junit.jupiter:junit-jupiter-api:$junitVersion",
