@@ -1,15 +1,11 @@
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.util.zip.ZipFile;
-
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HomeWorkTests {
@@ -41,6 +37,17 @@ public class HomeWorkTests {
 
         assertEquals(12, total);
         assertEquals(2, page);
+
+    }
+
+    @Test
+    void listResourseTestWithAssertJ() {
+        Response response = get("https://reqres.in/api/unknown")
+                .then()
+                .statusCode(200)
+                .extract().response();
+
+        assertThat(response).isNotNull();
 
     }
 
@@ -98,6 +105,7 @@ public class HomeWorkTests {
                 .get("https://reqres.in/api/unknown/23")
                 .then()
                 .statusCode(404);
+
     }
 
     @Test
