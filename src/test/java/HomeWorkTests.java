@@ -1,12 +1,16 @@
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.zip.ZipFile;
 
+import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasKey;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HomeWorkTests {
 
@@ -18,16 +22,32 @@ public class HomeWorkTests {
                 .get("https://reqres.in/api/users?page=2")
                 .then()
                 .statusCode(200)
-                .body("total", is(12))
-                .body("total_pages", is(2))
                 .body("data.last_name", hasItems("Lawson", "Ferguson"))
-                .body("data.last_name", hasKey("email"));
+                .body("data.first_name", hasItems("Byron", "George", "Rachel"))
+                .body("data.avatar", hasItem("https://reqres.in/img/faces/11-image.jpg"))
+                .body("$", hasKey("page"))
+                .body("data", everyItem(hasKey("email")));
+    }
+
+    @Test
+    void listUsersTestWithAssertJ() {
+        Response response = get("https://reqres.in/api/users?page=2")
+                .then()
+                .statusCode(200)
+                .extract().response();
+
+        int total = response.path("total");
+        int page = response.path("page");
+
+        assertEquals(12, total);
+        assertEquals(2, page);
+
     }
 
     @Test
     void createUserTest() {
 
-       String data = "{ \"name\": \"morpheus\", \"job\": \"leader\" }";
+        String data = "{ \"name\": \"morpheus\", \"job\": \"leader\" }";
 
         given()
                 .contentType(JSON)
@@ -38,7 +58,6 @@ public class HomeWorkTests {
                 .statusCode(201)
                 .body("name", is("morpheus"))
                 .body("job", is("leader"));
-
     }
 
     @Test
@@ -96,5 +115,6 @@ public class HomeWorkTests {
                 .statusCode(200)
                 .body("token", is("QpwL5tke4Pnpja7X4"));
     }
+
 
 }
