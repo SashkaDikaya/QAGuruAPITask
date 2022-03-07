@@ -1,4 +1,5 @@
 import io.restassured.response.Response;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.get;
@@ -7,7 +8,6 @@ import static io.restassured.http.ContentType.JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.json.JSONObject;
 
 
 public class HomeWorkTests {
