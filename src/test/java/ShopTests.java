@@ -1,4 +1,6 @@
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,10 +41,11 @@ public class ShopTests {
         Integer cardSize = 1;
 
         given()
-                .log().all()
-                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .filter(new AllureRestAssured())
+                .contentType(ContentType.JSON)
                 .cookie("Nop.customer=5dde7bcb-dbd6-4064-b0e7-18739a4fed42")
                 .body("product_attribute_28_7_10=28&product_attribute_28_1_11=31&addtocart_28.EnteredQuantity=1")
+                .log().all()
                 .when()
                 .post("/addproducttocart/details/28/1")
                 .then()
@@ -59,7 +62,7 @@ public class ShopTests {
         Integer wishListSize = 1;
 
         given()
-                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .contentType(ContentType.JSON)
                 .cookie("Nop.customer=21045fcb-7782-4d01-81a1-fda4f9b86b51")
                 .body("product_attribute_28_7_10=26&product_attribute_28_1_11=30&addtocart_28.EnteredQuantity=1")
                 .when()
@@ -77,7 +80,7 @@ public class ShopTests {
 
         String authorizationCookie =
                 given()
-                        .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                        .contentType(ContentType.JSON)
                         .body("Email=alex_wild%40mail.ru&Password=123456&RememberMe=false")
                         .when()
                         .post("/login")
@@ -101,7 +104,7 @@ public class ShopTests {
     void searchRingTest() {
 
         given()
-                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .contentType(ContentType.JSON)
                 .cookie("Nop.customer=efa04ead-b036-4630-86b1-5bd8875d03c6")
                 .when()
                 .get("/search?q=ring")
