@@ -1,24 +1,40 @@
+import io.qameta.allure.restassured.AllureRestAssured;
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static helpers.CustomAllureListener.withCustomTemplates;
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.json.JSONObject;
 
 
 public class HomeWorkTests {
+
+    @BeforeAll
+    static void setup() {
+        RestAssured.baseURI = "https://reqres.in/api";
+        RestAssured.filters(withCustomTemplates());
+    }
+
 
     @Test
     void listUsersTest() {
 
         given()
                 .contentType(JSON)
-                .get("https://reqres.in/api/users?page=2")
+                .log().uri()
+                .log().body()
+                .when()
+                .get("/users?page=2")
                 .then()
+                .log().status()
+                .log().body()
                 .statusCode(200)
                 .body("data.last_name", hasItems("Lawson", "Ferguson"))
                 .body("data.first_name", hasItems("Byron", "George", "Rachel"))
@@ -29,8 +45,10 @@ public class HomeWorkTests {
 
     @Test
     void listUsersTestWithAssertJ() {
-        Response response = get("https://reqres.in/api/users?page=2")
+        Response response = get("/users?page=2")
                 .then()
+                .log().status()
+                .log().body()
                 .statusCode(200)
                 .extract().response();
 
@@ -44,8 +62,10 @@ public class HomeWorkTests {
 
     @Test
     void listResourseTestWithAssertJ() {
-        Response response = get("https://reqres.in/api/unknown")
+        Response response = get("/unknown")
                 .then()
+                .log().status()
+                .log().body()
                 .statusCode(200)
                 .extract().response();
 
@@ -62,10 +82,14 @@ public class HomeWorkTests {
 
         given()
                 .contentType(JSON)
+                .log().uri()
+                .log().body()
                 .body(requestBody.toString())
                 .when()
-                .post("https://reqres.in/api/users")
+                .post("/users")
                 .then()
+                .log().status()
+                .log().body()
                 .statusCode(201)
                 .body("name", is("morpheus"))
                 .body("job", is("leader"));
@@ -80,10 +104,14 @@ public class HomeWorkTests {
 
         given()
                 .contentType(JSON)
+                .log().uri()
+                .log().body()
                 .body(requestBody.toString())
                 .when()
-                .post("https://reqres.in/api/register")
+                .post("/register")
                 .then()
+                .log().status()
+                .log().body()
                 .statusCode(200)
                 .body("token", is("QpwL5tke4Pnpja7X4"));
     }
@@ -97,10 +125,14 @@ public class HomeWorkTests {
 
         given()
                 .contentType(JSON)
+                .log().uri()
+                .log().body()
                 .body(requestBody.toString())
                 .when()
-                .post("https://reqres.in/api/users/2")
+                .post("/users/2")
                 .then()
+                .log().status()
+                .log().body()
                 .statusCode(201)
                 .body("job", is("zion resident"));
     }
@@ -110,8 +142,10 @@ public class HomeWorkTests {
 
         given()
                 .contentType(JSON)
-                .get("https://reqres.in/api/unknown/23")
+                .get("/unknown/23")
                 .then()
+                .log().status()
+                .log().body()
                 .statusCode(404);
 
     }
@@ -125,10 +159,14 @@ public class HomeWorkTests {
 
         given()
                 .contentType(JSON)
+                .log().uri()
+                .log().body()
                 .body(requestBody.toString())
                 .when()
-                .post("https://reqres.in/api/login")
+                .post("/login")
                 .then()
+                .log().status()
+                .log().body()
                 .statusCode(200)
                 .body("token", is("QpwL5tke4Pnpja7X4"));
     }
